@@ -161,6 +161,7 @@ void lava_SM( int event, int param )
       // Set LCD to welcome player and press start
       // Play Welcome Music
       if (event == FRIEND_JOINED) {
+        // update local variable p1Status = Joined
         // Display on LCD Friend Joined Waiting For You
         nextState = WAITING_FOR_YOU;
       }
@@ -176,6 +177,7 @@ void lava_SM( int event, int param )
       myPlayerNumber = 2;
       if (event == YOU_JOINED) {
         Serial.println("Both Players Joined");
+        //publish p2Status Joined
         // reset score & start music
         nextState = START_GAME;
       }
@@ -185,8 +187,10 @@ void lava_SM( int event, int param )
       friendPlayerNumber = 2;
       myPlayerNumber = 1;
       Serial.println("STATE: Waiting For Friend");
+      //publish p1Status Joined
       if ( event == FRIEND_JOINED) {
         Serial.println("Both Players Joined");
+        // update local variable p2Status = Joined
         // reset score & start music
         nextState = START_GAME;
       }
