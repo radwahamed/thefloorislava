@@ -19,11 +19,11 @@ LED & Pressure Sensor Code Test
 #define F5 13
 
 // Initialize based on your pressure sensor
-int threshold1 = 0;
-int threshold2 = 0;
-int threshold3 = 0;
-int threshold4 = 0;
-int threshold5 = 0;
+int threshold1 = 400;
+int threshold2 = 400;
+int threshold3 = 400;
+int threshold4 = 400;
+int threshold5 = 400;
 int sensor1, sensor2, sensor3, sensor4, sensor5;
 
 int myNextStep, myCurrentStep, friendStep;
@@ -54,12 +54,42 @@ void setup() {
 }
 
 void loop() {
-  
-  lightMyStep(1);
-  lightFriendStep(2);
 
-  readMyStep(myCurrentStep, myNextStep);
-  readMyStep(myNextStep);
+    lightMyStep(1);
+    lightFriSendStep(1);
+    delay(1000);
+    lightMyStep(2);
+    lightFriendStep(2);
+    delay(1000);  
+    lightMyStep(3);
+    lightFriendStep(3);
+    delay(1000);
+    lightMyStep(4);
+    lightFriendStep(4);
+    delay(1000);
+    lightMyStep(5);
+    lightFriendStep(5);
+    delay(1000);  
+
+
+  //readMyStep(myCurrentStep, myNextStep);
+
+  
+  if (readMyStep(1)) {
+    Serial.println("1");
+  }
+  if (readMyStep(2)) {
+    Serial.println("2");
+  }
+  if (readMyStep(3)) {
+    Serial.println("3");
+  }
+  if (readMyStep(4)) {
+    Serial.println("4");
+  }
+  if (readMyStep(5)) {
+    Serial.println("5");
+  }
   
 }
 
@@ -73,35 +103,35 @@ boolean readMyStep(int myNextStep) { // returns True if correct Step, false if n
       if ((sensor1>threshold1) && (sensor2<threshold2) && 
       (sensor3<threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
         return true;
-      }
+      } 
       break;
     }
     case 2: {
       if ((sensor1<threshold1) && (sensor2>threshold2) && 
       (sensor3<threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
         return true;
-      }
+      } 
       break;
     }
     case 3: {
       if ((sensor1<threshold1) && (sensor2<threshold2) && 
       (sensor3>threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
         return true;
-      }
+      } 
       break;
     }
     case 4: {
       if ((sensor1<threshold1) && (sensor2<threshold2) && 
       (sensor3<threshold3) && (sensor4>threshold4) && (sensor5<threshold5)) {
         return true;
-      }
+      } 
       break;
     }
     case 5: {
       if ((sensor1<threshold1) && (sensor2<threshold2) && 
       (sensor3<threshold3) && (sensor4<threshold4) && (sensor5>threshold5)) {
         return true;
-      }
+      } 
       break;
     }
   }
@@ -111,11 +141,26 @@ boolean readMyStep(int myNextStep) { // returns True if correct Step, false if n
 }
 
 void readSensors(void){
-  int sensor1 = analogRead(P1);
-  int sensor2 = analogRead(P2);
-  int sensor3 = analogRead(P3);
-  int sensor4 = analogRead(P4);
-  int sensor5 = analogRead(P5);
+  sensor1 = analogRead(P1);
+  //Serial.print("Sensor1: ");
+  //Serial.println(sensor1);
+  delay(10);
+  sensor2 = analogRead(P2);
+  //Serial.print("Sensor2: ");
+  //Serial.println(sensor2);
+  delay(10);
+  sensor3 = analogRead(P3);
+  //Serial.print("Sensor3: ");
+  //Serial.println(sensor3);
+  delay(10);
+  sensor4 = analogRead(P4);
+  //Serial.print("Sensor4: ");
+  //Serial.println(sensor4);
+  delay(10);
+  sensor5 = analogRead(P5);
+  //Serial.print("Sensor5: ");
+  //Serial.println(sensor5);
+  delay(10);
 }
 
 boolean readMyStep(int myCurrentStep, int myNextStep) { // returns True if correct Step, false if not correct
@@ -215,3 +260,4 @@ void lightFriendStep(int friendStep){
       break;
     } 
   }
+}
