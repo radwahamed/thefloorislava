@@ -11,19 +11,16 @@
 // Leave this line unchanged
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
-
 int score_int = 8;
-String winner = "Radwa";
 
+#define button 17
 
 void setup() {
   Serial.begin(9600);
-  u8g2.begin();
-  u8g2.setFontRefHeightExtendedText();
-  u8g2.setFontDirection(0);
-  u8g2.setDrawColor(1);
-  u8g2.setFontPosCenter();
+  LCD_initializations();
+  pinMode(button, INPUT);
 }
+
 
 void loop() {
   LCD_settingUp();
@@ -34,6 +31,8 @@ void loop() {
   delay(3000);
   LCD_starting();
   delay(3000);
+  LCD_jump();
+  delay(3000);
   LCD_updateScore();
   delay(1000);
   score_int++;  
@@ -42,11 +41,14 @@ void loop() {
   score_int++;
   LCD_updateScore();
   delay(1000);
-  LCD_announceWinner();
+  LCD_announceWinner("you");
   delay(3000);
+  LCD_announceWinner("friend");
+  delay(3000);  
   winner = "Ryanne";
   LCD_announceWinner();
   delay(3000);
+  buttonDown();
 }
 
 void LCD_settingUp() { // GOOD
@@ -56,7 +58,15 @@ void LCD_settingUp() { // GOOD
   u8g2.sendBuffer(); 
 }
 
-void LCD_updateScore() { // GOOD
+
+void LCD_jump() { // USED
+  u8g2.clearBuffer();
+  u8g2.setFont(u8g2_font_fub25_tf);
+  u8g2.drawStr(12, 32, "Jump!");
+  u8g2.sendBuffer();
+}
+
+void LCD_updateScore() { 
   int centered_x;
   u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_fub42_tn);
@@ -71,7 +81,7 @@ void LCD_updateScore() { // GOOD
   u8g2.sendBuffer();
 }
 
-void LCD_waiting() { // GOOD
+void LCD_meWaiting() { // USED
   u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_fub17_tf);
   u8g2.drawStr(5,15, "Waiting on");
@@ -79,34 +89,37 @@ void LCD_waiting() { // GOOD
   u8g2.sendBuffer();
 }
 
-void LCD_announceWinner() { // GOOD
+void LCD_friendWaiting() { // USED
   u8g2.clearBuffer();
-  int centered_x;
-  String announcement = winner + " Wins!";
+  u8g2.setFont(u8g2_font_fub17_tf);
+  u8g2.drawStr(35,15, "Friend");
+  u8g2.drawStr(20,45, "waiting...");
+  u8g2.sendBuffer();
+}
 
-  if (winner.length() <= 5) {
-    u8g2.setFont(u8g2_font_fub14_tf);
-    centered_x = 0;
-  } else if (winner.length() <= 8) {
-    u8g2.setFont(u8g2_font_fub11_tf);
-    centered_x = 10;
+void LCD_announceWinner(String winner) { 
+  u8g2.clearBuffer();
+  u8g2.setFont(u8g2_font_fub14_tf);
+  if (winner == "you") {
+    u8g2.drawStr(16, 20, "You Win!");
+  } else if (winner == "friend") {
+    u8g2.drawStr(3, 20, "Friend Wins!");
   }
-  
-  u8g2.drawStr(centered_x, 20, announcement.c_str());
+
   u8g2.setFont(u8g2_font_6x10_tf);
   u8g2.drawStr(0, 45, "Press button to play");
   u8g2.drawStr(40, 55, "again");
   u8g2.sendBuffer();
 }
 
-void LCD_starting() { // GOOD
+void LCD_starting() { // Used
   u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_fub17_tf);
   u8g2.drawStr(10, 32, "Starting...");
   u8g2.sendBuffer();  
 }
 
-void LCD_startButton() {
+void LCD_startButton() { // USED
   u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_fub14_tf);
   u8g2.drawStr(35, 15, "Press");
@@ -114,3 +127,24 @@ void LCD_startButton() {
   u8g2.drawStr(37, 55, "start");
   u8g2.sendBuffer(); 
 }
+
+void buttonDown(){
+  static int lastButtonState = LOW;
+  int thisButtonState = digitalRead(button);
+  // Check if the button has been pressed
+  if (thisButtonState != lastButtonState) {
+    if (thisButtonState == HIGH) {
+      //eventManager.queueEvent(EVENT_BUTTONPRESS, 0);
+      Serial.println("Button Pressed");
+    }
+  }
+  lastButtonState = thisButtonState;
+}
+
+void LCD_initializations(void){
+  u8g2.begin();
+  u8g2.setFontRefHeightExtendedText();
+  u8g2.setFontDirection(0);
+  u8g2.setDrawColor(1);
+  u8g2.setFontPosCenter();
+}  
