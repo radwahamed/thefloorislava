@@ -11,6 +11,7 @@
 // Leave this line unchanged
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
+
 int score_int = 8;
 
 #define button 17
@@ -40,14 +41,11 @@ void loop() {
   delay(1000);
   score_int++;
   LCD_updateScore();
-  delay(1000);
+  delay(3000);
   LCD_announceWinner("you");
   delay(3000);
   LCD_announceWinner("friend");
   delay(3000);  
-  winner = "Ryanne";
-  LCD_announceWinner();
-  delay(3000);
   buttonDown();
 }
 
@@ -78,6 +76,8 @@ void LCD_updateScore() {
     centered_x = 30;
   }
   u8g2.drawStr(centered_x, 32, score.c_str());
+  u8g2.setFont(u8g2_font_6x10_tf);
+  u8g2.drawStr(25, 60, "Friend's Turn");
   u8g2.sendBuffer();
 }
 
@@ -140,6 +140,7 @@ void buttonDown(){
   }
   lastButtonState = thisButtonState;
 }
+
 
 void LCD_initializations(void){
   u8g2.begin();
