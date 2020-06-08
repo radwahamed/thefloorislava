@@ -70,11 +70,12 @@ void loop() {
     lightMyStep(5);
     lightFriendStep(5);
     delay(1000);  
+    LED_off();
+    delay(3000);
 
-
-  //readMyStep(myCurrentStep, myNextStep);
-
-  
+  if (readMyStep(0)) {
+    Serial.println("You TOUCHED LAVA!");
+  }
   if (readMyStep(1)) {
     Serial.println("1");
   }
@@ -99,6 +100,13 @@ boolean readMyStep(int myNextStep) { // returns True if correct Step, false if n
   readSensors();
 
   switch (myNextStep){
+    case 0: { // None are pressed
+      if ((sensor1<threshold1) && (sensor2<threshold2) && 
+      (sensor3<threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
+        return true;
+      }
+      break; 
+    }
     case 1: {
       if ((sensor1>threshold1) && (sensor2<threshold2) && 
       (sensor3<threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
@@ -137,7 +145,6 @@ boolean readMyStep(int myNextStep) { // returns True if correct Step, false if n
   }
   // otherwise
   return false;
-  
 }
 
 void readSensors(void){
@@ -163,13 +170,6 @@ void readSensors(void){
   delay(10);
 }
 
-boolean readMyStep(int myCurrentStep, int myNextStep) { // returns True if correct Step, false if not correct
-  // if any other step besides myCurrentStep or myNextStep is pressed
-  if ((readMyStep(myCurrentStep)) || (readMyStep(myNextStep))) {
-    return true;
-  }
-  return false;
-}
 
 
 void lightMyStep(int myNextStep){
@@ -260,4 +260,17 @@ void lightFriendStep(int friendStep){
       break;
     } 
   }
+}
+
+void LED_off() {
+  digitalWrite(T1, LOW);
+  digitalWrite(T2, LOW);
+  digitalWrite(T3, LOW);
+  digitalWrite(T4, LOW);
+  digitalWrite(T5, LOW);
+  digitalWrite(F1, LOW);
+  digitalWrite(F2, LOW);
+  digitalWrite(F3, LOW);
+  digitalWrite(F4, LOW);
+  digitalWrite(F5, LOW);
 }
