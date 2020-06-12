@@ -300,19 +300,19 @@ void OnFriendJoining(){
 void checkStep() {
   // Case for Step Failure
   currentStepTime = millis() - currentStepStartTime;
-  //if (currentStepTime > jumpTimeThreshold) {
-    // Read Pressure Sensor Data after jumpTime
-    // if (readMyStep(myNextStep)) { // returns true if only next step is being stepped on
-    //      eventManager.queueEvent(STEP_SUCCESS, 0)
-    // } else {
-    //      eventManager.queueEvent(STEP_FAILURE, 0);
-    // }
-  //} else { // step time is less jumpTimeThreshold
-    // If no tiles are pressed, this is a failure bc you are touching lava
-    // if (readMyStep(0)) { // function returns true if none are pressed
-    //    eventManager.queueEvent(STEP_FAILURE, 0);
-    // }
-  //}
+  if (currentStepTime > jumpTimeThreshold) {
+  //     Read Pressure Sensor Data after jumpTime
+     if (readMyStep(myNextStep)) { // returns true if only next step is being stepped on
+          eventManager.queueEvent(STEP_SUCCESS, 0);
+     } else {
+          eventManager.queueEvent(STEP_FAILURE, 0);
+     }
+  } else { // step time is less jumpTimeThreshold
+  //   If no tiles are pressed, this is a failure bc you are touching lava
+     if (readMyStep(0)) { // function returns true if none are pressed
+        eventManager.queueEvent(STEP_FAILURE, 0);
+     }
+  }
 }
 
 
@@ -804,60 +804,60 @@ void LED_off() {
 // PRESSURE SENSOR CODE
 // -----------------------------------
 
-//void readSensors(void){
-//  sensor1 = analogRead(P1);
-//  delay(10);
-//  sensor2 = analogRead(P2);
-//  delay(10);
-//  sensor3 = analogRead(P3);
-//  delay(10);
-//  sensor4 = analogRead(P4);
-//  delay(10);
-//  sensor5 = analogRead(P5);
-//  delay(10);
-//}
-//
-//// Function for after Jump Time Threshold
-//// Returns true if only stepping on correct step, false otherwise
-//boolean readMyStep(int myNextStep) { 
-//  readSensors();
-//  switch (myNextStep){
-//    case 1: {
-//      if ((sensor1>threshold1) && (sensor2<threshold2) && 
-//      (sensor3<threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
-//        return true;
-//      } 
-//      break;
-//    }
-//    case 2: {
-//      if ((sensor1<threshold1) && (sensor2>threshold2) && 
-//      (sensor3<threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
-//        return true;
-//      } 
-//      break;
-//    }
-//    case 3: {
-//      if ((sensor1<threshold1) && (sensor2<threshold2) && 
-//      (sensor3>threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
-//        return true;
-//      } 
-//      break;
-//    }
-//    case 4: {
-//      if ((sensor1<threshold1) && (sensor2<threshold2) && 
-//      (sensor3<threshold3) && (sensor4>threshold4) && (sensor5<threshold5)) {
-//        return true;
-//      } 
-//      break;
-//    }
-//    case 5: {
-//      if ((sensor1<threshold1) && (sensor2<threshold2) && 
-//      (sensor3<threshold3) && (sensor4<threshold4) && (sensor5>threshold5)) {
-//        return true;
-//      } 
-//      break;
-//    }
-//  }
-//  // otherwise
-//  return false;
-//}
+void readSensors(void){
+  sensor1 = analogRead(P1);
+  delay(10);
+  sensor2 = analogRead(P2);
+  delay(10);
+  sensor3 = analogRead(P3);
+  delay(10);
+  sensor4 = analogRead(P4);
+  delay(10);
+  sensor5 = analogRead(P5);
+  delay(10);
+}
+
+// Function for after Jump Time Threshold
+// Returns true if only stepping on correct step, false otherwise
+boolean readMyStep(int myNextStep) { 
+  readSensors();
+  switch (myNextStep){
+    case 1: {
+      if ((sensor1>threshold1) && (sensor2<threshold2) && 
+      (sensor3<threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
+        return true;
+      } 
+      break;
+    }
+    case 2: {
+      if ((sensor1<threshold1) && (sensor2>threshold2) && 
+      (sensor3<threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
+        return true;
+      } 
+      break;
+    }
+    case 3: {
+      if ((sensor1<threshold1) && (sensor2<threshold2) && 
+      (sensor3>threshold3) && (sensor4<threshold4) && (sensor5<threshold5)) {
+        return true;
+      } 
+      break;
+    }
+    case 4: {
+      if ((sensor1<threshold1) && (sensor2<threshold2) && 
+      (sensor3<threshold3) && (sensor4>threshold4) && (sensor5<threshold5)) {
+        return true;
+      } 
+      break;
+    }
+    case 5: {
+      if ((sensor1<threshold1) && (sensor2<threshold2) && 
+      (sensor3<threshold3) && (sensor4<threshold4) && (sensor5>threshold5)) {
+        return true;
+      } 
+      break;
+    }
+  }
+  // otherwise
+  return false;
+}
